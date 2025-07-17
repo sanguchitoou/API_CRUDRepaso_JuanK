@@ -18,7 +18,7 @@ public class DTOUsuario {
     private Long idRol;
     @NotBlank @Email(message = "Debe ser un correo válido")
     private String correo;
-    @NotBlank @Size(min = 8, max = 30, message = "La contraseña debe de tener al menos 8 carácteres")
+    @NotBlank @Size(min = 8, message = "La contraseña debe de tener al menos 8 carácteres")
     private String contrasena;
     @NotNull
     @Positive(message = "EL ID del Cargo debe ser positivo")
