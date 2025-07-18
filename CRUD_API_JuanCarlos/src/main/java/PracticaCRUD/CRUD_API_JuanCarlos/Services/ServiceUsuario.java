@@ -83,12 +83,11 @@ public class ServiceUsuario {
         objConvertDTOUser.setCorreo(entityUsuario.getCorreo());
         objConvertDTOUser.setContrasena(entityUsuario.getContrasena());
         objConvertDTOUser.setIdCargo(entityUsuario.getIdCargo());
-        //Retornamos el objeto DTO
 
+        //Retornamos el objeto DTO
         return objConvertDTOUser;
     }
 
-    //Método para conversión de datos de la ENTIDAD hacia el DTO (método de arriba)
     private EntityUsuario convertirAEntity(DTOUsuario dtoUsuario){
         EntityUsuario objEntityUsuario = new EntityUsuario();
         objEntityUsuario.setNombre(dtoUsuario.getNombre());
