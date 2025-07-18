@@ -3,7 +3,9 @@ package PracticaCRUD.CRUD_API_JuanCarlos.Services;
 import PracticaCRUD.CRUD_API_JuanCarlos.Entities.EntityUsuario;
 import PracticaCRUD.CRUD_API_JuanCarlos.Models.DTO.DTOUsuario;
 import PracticaCRUD.CRUD_API_JuanCarlos.Models.Repositories.RepositoryUsuario;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,10 +34,41 @@ public class ServiceUsuario {
     }
 
     //Método PUT
+    public DTOUsuario putUsuario(DTOUsuario dtoUsuario, Long idUsuario) {
+        if(dtoUsuario == null){
+            throw new IllegalArgumentException("No pueden haber campos vacíos");
+        }
+        EntityUsuario objUsuarioExists = objUsuarioRepo.findById(idUsuario).orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con ID: " + idUsuario));
+        objUsuarioExists.setNombre(dtoUsuario.getNombre());
+        objUsuarioExists.setApellido(dtoUsuario.getApellido());
+        objUsuarioExists.setIdGrupoExpo(dtoUsuario.getIdGrupoExpo());
+        objUsuarioExists.setIdRol(dtoUsuario.getIdRol());
+        objUsuarioExists.setCorreo(dtoUsuario.getCorreo());
+        objUsuarioExists.setIdCargo(dtoUsuario.getIdCargo());
 
+        EntityUsuario objUsuarioEntity = objUsuarioRepo.save(objUsuarioExists);
+        return convertirADTO(objUsuarioEntity);
+    }
 
     //Método DELETE
+    public boolean deleteUsuario(Long idUsuario){
+        try{
+            if (idUsuario == null || idUsuario.describeConstable().isEmpty()) {
+                throw new IllegalArgumentException("El ID del Usuario no puede ser nulo o vacío");
+            }
 
+            boolean exists = objUsuarioRepo.existsById(idUsuario);
+            if (!exists) {
+                throw new EntityNotFoundException("No se encontró el Usuario con ID: " + idUsuario);
+            }
+
+            objUsuarioRepo.deleteById(idUsuario);
+            return true;
+        }
+        catch (EmptyResultDataAccessException e){
+            throw new EntityNotFoundException("No se encontró la Inspección");
+        }
+    }
 
     //Conversiones
     private DTOUsuario convertirADTO(EntityUsuario entityUsuario){
